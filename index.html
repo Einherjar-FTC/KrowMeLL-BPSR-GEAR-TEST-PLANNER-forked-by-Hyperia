@@ -937,12 +937,7 @@ const Logic = {
             }
         });
 
-        total.Haste += (baseAgi * 0.45);
-
-        if (raidBonus && raidBonus.t === 'p') {
-            if (raidBonus.l === "Luck") total.Luck *= (1 + raidBonus.v/100);
-            if (raidBonus.l.includes("Vers")) total.Versatility *= (1 + raidBonus.v/100);
-        }
+        total.Haste += (baseAgi * 0.45); // agility->haste conversion
 
         // BUG FIX: ID MAPPING for Raw Stats
         const statIdMap = {
@@ -963,7 +958,16 @@ const Logic = {
         const pMast = Logic.getStatPercent("Mastery", total.Mastery);
         const pHaste = Logic.getStatPercent("Haste", total.Haste);
         const pCrit = Logic.getStatPercent("Crit", total.Crit);
-        const pLuck = Logic.getStatPercent("Luck", total.Luck);
+        let pLuck = Logic.getStatPercent("Luck", total.Luck);
+
+        // DIESEN BLOCK HINZUFÜGEN:
+if (raidBonus && raidBonus.l === "Luck") {
+    pLuck += raidBonus.v; // Fügt die 6.0 direkt als +6% auf das Endergebnis hinzu
+}
+// Falls in Zukunft andere Specs mit Versatility-Raid-Bonus flach berechnet werden sollen:
+if (raidBonus && raidBonus.l.includes("Vers")) {
+    // pVers += raidBonus.v; // Optional, falls gewünscht
+}
 
         $('r-vers').innerText = pVers.toFixed(2) + "%";
         $('r-mast').innerText = pMast.toFixed(2) + "%";
@@ -1161,16 +1165,13 @@ const Optimizer = {
             const data = DATA.IMAGINE.OPTIONS[im.key];
             if(data) raw[data.stat] += data.vals[im.lvl];
         });
-        if (layout.gear[0].raid && ctx.bonus && ctx.bonus.t === 'p') {
-            if (ctx.bonus.l === "Luck") raw.Luck *= (1 + ctx.bonus.v/100);
-            if (ctx.bonus.l.includes("Vers")) raw.Versatility *= (1 + ctx.bonus.v/100);
-        }
+        
         return {
             v: Logic.getStatPercent("Versatility", raw.Versatility),
             m: Logic.getStatPercent("Mastery", raw.Mastery),
             h: Logic.getStatPercent("Haste", raw.Haste),
             c: Logic.getStatPercent("Crit", raw.Crit),
-            l: Logic.getStatPercent("Luck", raw.Luck)
+            l: Logic.getStatPercent("Luck", raw.Luck) + (layout.gear[0].raid && ctx.bonus && ctx.bonus.l === "Luck" ? ctx.bonus.v : 0)
         };
     },
 
