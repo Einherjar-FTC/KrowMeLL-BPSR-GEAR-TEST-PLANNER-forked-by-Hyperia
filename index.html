@@ -430,10 +430,65 @@ const DATA = {
     LEGENDARY_DATA: {
         ARMOR: {
             opts: [
-                { n: "Main Stat %", v: [0.5, 1.0, 1.5], u: "%" }, // Dyn name
-                { n: "Max HP", v: [1500, 1875, 2250, 2625, 3000], u: "" },
-                { n: "Armor", v: [48, 96, 144], u: "" },
-                { n: "All Elem Res", v: [36, 72, 108], u: "" }
+                { n: "Max HP", v: [6000], u: "" }, // Dyn name
+                { n: "Armor", v: [400], u: "" },
+                { n: "All Elem Res", v: [200], u: "" }
+            ]
+        },
+        Helmet: {
+            opts: [
+                { n: "Cast Speed %", v: [2.0], u: "%" }, // Dyn name
+                { n: "Max HP", v: [6000], u: "" }, 
+                { n: "Armor", v: [400], u: "" },
+                { n: "All Elem Res", v: [200], u: "" }
+            ]
+        },
+        Chest: {
+            opts: [
+                { n: "Shield %", v: [4.0], u: "%" }, // Dyn name
+                { n: "Max HP", v: [6000], u: "" }, 
+                { n: "Armor", v: [400], u: "" },
+                { n: "All Elem Res", v: [200], u: "" }
+            ]
+        },
+        Gloves: {
+            opts: [
+                { n: "Attack Speed", v: [1.0], u: "%" }, // Dyn name
+                { n: "Max HP", v: [6000], u: "" }, 
+                { n: "Armor", v: [400], u: "" },
+                { n: "All Elem Res", v: [200], u: "" }
+            ]
+        },
+        Boots: {
+            opts: [
+                { n: "Movement Speed", v: [5.0], u: "%" }, // Dyn name
+                { n: "Max HP", v: [6000], u: "" }, 
+                { n: "Armor", v: [400], u: "" },
+                { n: "All Elem Res", v: [200], u: "" }
+            ]
+        },
+        Weapon: {
+            opts: [
+                { n: "Adaptive Atk", v: [3.5], u: "%" }, // Dyn name
+                { n: "Attack Speed", v: [3.5], u: "%" }, 
+                { n: "Res. Break", v: [18.0], u: "%" },
+                { n: "DMG Bonus", v: [3.5], u: "%" }
+            ]
+        },
+        "Bracelet (L)": {
+            opts: [
+                { n: "Healing Output", v: [4.0], u: "%" }, // Dyn name
+                { n: "Max HP", v: [6000], u: "" }, 
+                { n: "Armor", v: [400], u: "" },
+                { n: "All Elem Res", v: [200], u: "" }
+            ]
+        },
+        "Bracelet (R)": {
+            opts: [
+                { n: "Healing Output", v: [4.0], u: "%" }, // Dyn name
+                { n: "Max HP", v: [6000], u: "" }, 
+                { n: "Armor", v: [400], u: "" },
+                { n: "All Elem Res", v: [200], u: "" }
             ]
         },
         ACC: {
@@ -616,8 +671,7 @@ const UI = {
             const sigilOpts = `<option value="">-</option>` + slotSigils.map(s => createOpt(s.n)).join('');
             
             // Generate Legendary Options based on slot type
-            const isArmorGroup = DATA.SLOT_CATS.ARMOR.includes(slot);
-            const legGroup = isArmorGroup ? DATA.LEGENDARY_DATA.ARMOR : DATA.LEGENDARY_DATA.ACC;
+            const legGroup = DATA.LEGENDARY_DATA[slot] || (DATA.SLOT_CATS.ARMOR.includes(slot) ? DATA.LEGENDARY_DATA.ARMOR : DATA.LEGENDARY_DATA.ACC);
             
             let legTypeOpts = `<option value="">-</option>`;
             legGroup.opts.forEach(opt => {
@@ -666,9 +720,7 @@ const UI = {
             valSelect.innerHTML = `<option value="0">-</option>`;
             return;
         }
-
-        const isArmorGroup = DATA.SLOT_CATS.ARMOR.includes(slot);
-        const legGroup = isArmorGroup ? DATA.LEGENDARY_DATA.ARMOR : DATA.LEGENDARY_DATA.ACC;
+        const legGroup = DATA.LEGENDARY_DATA[slot] || (DATA.SLOT_CATS.ARMOR.includes(slot) ? DATA.LEGENDARY_DATA.ARMOR : DATA.LEGENDARY_DATA.ACC);
         
         // Find option data based on original name or adapted name
         let optData = legGroup.opts.find(o => o.n === type); 
