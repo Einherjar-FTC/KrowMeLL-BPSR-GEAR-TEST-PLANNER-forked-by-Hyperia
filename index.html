@@ -28,6 +28,9 @@
             
             --radius: 6px;
             --shadow: 0 4px 15px rgba(0,0,0,0.5);
+
+            /* Dynamisches Spalten-Layout für Raid+ Toggle */
+            --grid-template: 0.6fr 0.3fr 0.4fr 0.7fr 0.7fr 0.7fr 2.2fr 0.6fr 1.8fr;
         }
 
         body { 
@@ -141,8 +144,7 @@
         /* Gear Table */
         .gear-header { 
             display: grid; 
-            /* Slot | Raid | P | S | R | Sigil Name | Sigil Lvl | Legendary */
-            grid-template-columns: 0.6fr 0.3fr 0.7fr 0.7fr 0.7fr 2.2fr 0.6fr 1.8fr; 
+            grid-template-columns: var(--grid-template); 
             gap: 10px;
             background: #252525; color: var(--text-main); padding: 12px 10px; 
             border-radius: var(--radius); font-weight: bold; text-transform: uppercase; font-size: 0.8em;
@@ -150,7 +152,7 @@
         }
         .gear-row { 
             display: grid; 
-            grid-template-columns: 0.6fr 0.3fr 0.7fr 0.7fr 0.7fr 2.2fr 0.6fr 1.8fr; 
+            grid-template-columns: var(--grid-template); 
             gap: 10px;
             align-items: center; padding: 10px; border-bottom: 1px solid #2a2a2a;
             background: transparent; transition: background 0.2s;
@@ -277,6 +279,7 @@
             <div class="gear-header">
                 <div>Slot</div>
                 <div class="text-center">Raid</div>
+                <div class="text-center raid-plus-header">Raid +</div>
                 <div>Primary</div>
                 <div>Secondary</div>
                 <div>Reforge</div>
@@ -387,6 +390,10 @@
 </div>
 
 <script>
+// --- FEATURE CONFIG & CONSTANTS ---
+const ENABLE_RAID_PLUS = true; // Zur nächsten Season einfach auf false ändern!
+const ARMOR_RAID_UPGRADED = { p: 2700, s: 2700, r: 711 };
+
 // --- 1. DATA CONFIGURATION ---
 const DATA = {
     STATS: ["Versatility", "Mastery", "Haste", "Crit", "Luck"],
@@ -430,14 +437,14 @@ const DATA = {
     LEGENDARY_DATA: {
         ARMOR: {
             opts: [
-                { n: "Max HP", v: [5000], u: "" }, // Dyn name
+                { n: "Max HP", v: [5000], u: "" }, 
                 { n: "Armor", v: [320], u: "" },
                 { n: "All Elem Res", v: [160], u: "" }
             ]
         },
         Helmet: {
             opts: [
-                { n: "Cast Speed %", v: [2.0], u: "%" }, // Dyn name
+                { n: "Cast Speed %", v: [2.0], u: "%" }, 
                 { n: "Max HP", v: [5000], u: "" }, 
                 { n: "Armor", v: [320], u: "" },
                 { n: "All Elem Res", v: [160], u: "" }
@@ -445,7 +452,7 @@ const DATA = {
         },
         Chest: {
             opts: [
-                { n: "Shield %", v: [4.0], u: "%" }, // Dyn name
+                { n: "Shield %", v: [4.0], u: "%" }, 
                 { n: "Max HP", v: [5000], u: "" }, 
                 { n: "Armor", v: [320], u: "" },
                 { n: "All Elem Res", v: [160], u: "" }
@@ -453,7 +460,7 @@ const DATA = {
         },
         Gloves: {
             opts: [
-                { n: "Attack Speed", v: [1.0], u: "%" }, // Dyn name
+                { n: "Attack Speed", v: [1.0], u: "%" }, 
                 { n: "Max HP", v: [5000], u: "" }, 
                 { n: "Armor", v: [320], u: "" },
                 { n: "All Elem Res", v: [160], u: "" }
@@ -461,7 +468,7 @@ const DATA = {
         },
         Boots: {
             opts: [
-                { n: "Movement Speed", v: [4.0], u: "%" }, // Dyn name
+                { n: "Movement Speed", v: [4.0], u: "%" }, 
                 { n: "Max HP", v: [5000], u: "" }, 
                 { n: "Armor", v: [320], u: "" },
                 { n: "All Elem Res", v: [160], u: "" }
@@ -469,7 +476,7 @@ const DATA = {
         },
         Weapon: {
             opts: [
-                { n: "Adaptive Atk", v: [3.5], u: "%" }, // Dyn name
+                { n: "Adaptive Atk", v: [3.5], u: "%" }, 
                 { n: "Attack Speed", v: [3.5], u: "%" }, 
                 { n: "Res. Break", v: [18.0], u: "%" },
                 { n: "DMG Bonus", v: [3.5], u: "%" }
@@ -477,7 +484,7 @@ const DATA = {
         },
         "Bracelet (L)": {
             opts: [
-                { n: "Healing Output", v: [4.0], u: "%" }, // Dyn name
+                { n: "Healing Output", v: [4.0], u: "%" }, 
                 { n: "Max HP", v: [5000], u: "" }, 
                 { n: "Armor", v: [320], u: "" },
                 { n: "All Elem Res", v: [160], u: "" }
@@ -485,7 +492,7 @@ const DATA = {
         },
         "Bracelet (R)": {
             opts: [
-                { n: "Healing Output", v: [4.0], u: "%" }, // Dyn name
+                { n: "Healing Output", v: [4.0], u: "%" }, 
                 { n: "Max HP", v: [5000], u: "" }, 
                 { n: "Armor", v: [320], u: "" },
                 { n: "All Elem Res", v: [160], u: "" }
@@ -493,7 +500,7 @@ const DATA = {
         },
         ACC: {
             opts: [
-                { n: "Adaptive Atk", v: [1.0, 1.5, 2.0], u: "%" }, // Dyn ATK/MATK
+                { n: "Adaptive Atk", v: [1.0, 1.5, 2.0], u: "%" }, 
                 { n: "Attack Speed", v: [1.0, 1.5, 2.0], u: "%" },
                 { n: "Res. Break", v: [3.0, 6.0, 9.0], u: "%" },
                 { n: "Cast Speed", v: [2.0, 3.0, 4.0], u: "%", req: "Intelligence" },
@@ -554,7 +561,6 @@ const DATA = {
 
 const SIGIL_DB = [
     { n: "Killer Arachnocrab", s: ["Weapon"], d: { 1: {"Adaptive MainStat": 70, "Endurance": 235}, 2: {"Adaptive MainStat": 75, "Endurance": 255}, 3: {"Adaptive MainStat": 80, "Endurance": 275} } },
-    
     { n: "Predator Arachnocrab", s: ["Weapon","Earrings","Necklace","Ring"], d: { 1: {"All Element Attack": 66}, 2: {"All Element Attack": 72}, 3: {"All Element Attack": 80} } },
     { n: "Wasteland Arachnocrab", s: ["Weapon","Earrings","Necklace","Ring"], d: { 1: {MATK:38}, 2: {MATK:45}, 3: {MATK:55} } },
     { n: "Infernal Arachnocrab", s: ["Weapon","Earrings","Necklace","Ring"], d: { 1: {ATK:38}, 2: {ATK:45}, 3: {ATK:55} } },
@@ -567,17 +573,14 @@ const SIGIL_DB = [
     { n: "Spiky Furball", s: ["Helmet","Chest","Gloves","Boots"], d: { 1: {Luck:620}, 2: {Luck:685}, 3: {Luck:750} } },
     { n: "Gnashing Furball", s: ["Helmet","Chest","Gloves","Boots"], d: { 1: {Haste:620}, 2: {Haste:685}, 3: {Haste:750} } },
     { n: "Hunter Mountain Boar", s: ["Helmet","Chest","Gloves","Boots"], d: { 1: {Crit:620}, 2: {Crit:685}, 3: {Crit:750} } },
-
     { n: "Sanctuary Eye (Master/Versa)", s: ["Bracelet (L)","Bracelet (R)","Charm"], d: { 1: {Mastery:750, Versatility:620}, 2: {Mastery:815, Versatility:685}, 3: {Mastery:880, Versatility:750} } },
     { n: "Man-Eating Furball (Luck/Versa)", s: ["Bracelet (L)","Bracelet (R)","Charm"], d: { 1: {Luck:750, Versatility:620}, 2: {Luck:815, Versatility:685}, 3: {Luck:880, Versatility:750} } },
     { n: "Verdan Fang (Haste/Versa)", s: ["Bracelet (L)","Bracelet (R)","Charm"], d: { 1: {Haste:750, Versatility:620}, 2: {Haste:815, Versatility:685}, 3: {Haste:880, Versatility:750} } },
     { n: "Dogorman (Crit/Versa)", s: ["Bracelet (L)","Bracelet (R)","Charm"], d: { 1: {Crit:750, Versatility:620}, 2: {Crit:815, Versatility:685}, 3: {Crit:880, Versatility:750} } },
-    
-    
     { n: "Wild Mountain Boar", s: ["Bracelet (L)","Bracelet (R)","Charm"], d: { 1: {Agility:60, Endurance:195}, 2: {Agility:65, Endurance:215}, 3: {Agility:70, Endurance:235} } },
     { n: "Ashen Yeti", s: ["Bracelet (L)","Bracelet (R)","Charm"], d: { 1: {Intellect:60, Endurance:195}, 2: {Intellect:65, Endurance:215}, 3: {Intellect:70, Endurance:235} } },
     { n: "Sandstone Lizard", s: ["Bracelet (L)","Bracelet (R)","Charm"], d: { 1: {Strength:60, Endurance:195}, 2: {Strength:65, Endurance:215}, 3: {Strength:70, Endurance:235} } },
-    ];
+];
 
 SIGIL_DB.forEach(s => {
     const k = Object.keys(s.d[1]);
@@ -589,6 +592,13 @@ const createOpt = (val, txt) => `<option value="${val}">${txt || val}</option>`;
 
 const UI = {
     init: () => {
+        // Optionale Deaktivierung für die nächste Season handhaben
+        if (!ENABLE_RAID_PLUS) {
+            document.documentElement.style.setProperty('--grid-template', '0.6fr 0.3fr 0.7fr 0.7fr 0.7fr 2.2fr 0.6fr 1.8fr');
+            const rpHeader = document.querySelector('.raid-plus-header');
+            if (rpHeader) rpHeader.remove();
+        }
+
         const classSel = $('class-select');
         classSel.innerHTML = Object.keys(DATA.CLASSES).map(c => createOpt(c)).join('');
         
@@ -667,10 +677,14 @@ const UI = {
             const isRaidSlot = DATA.RAID_SLOTS.includes(slot);
             const raidCheck = isRaidSlot ? `<input type="checkbox" id="raid-${i}" onchange="UI.toggleRaid(${i}, '${slot}')">` : '';
             
+            // Raid+ Checkbox-Spalte erzeugen (nur Rüstungen, keine Waffe)
+            const isRaidArmor = isRaidSlot && slot !== "Weapon";
+            const raidPlusCheck = (isRaidArmor && ENABLE_RAID_PLUS) ? `<input type="checkbox" id="raidplus-${i}" onchange="UI.toggleRaidPlus(${i})">` : '';
+            const raidPlusCol = ENABLE_RAID_PLUS ? `<div class="text-center">${raidPlusCheck}</div>` : '';
+
             const slotSigils = SIGIL_DB.filter(s => s.s.includes(slot));
             const sigilOpts = `<option value="">-</option>` + slotSigils.map(s => createOpt(s.n)).join('');
             
-            // Generate Legendary Options based on slot type
             const legGroup = DATA.LEGENDARY_DATA[slot] || (DATA.SLOT_CATS.ARMOR.includes(slot) ? DATA.LEGENDARY_DATA.ARMOR : DATA.LEGENDARY_DATA.ACC);
             
             let legTypeOpts = `<option value="">-</option>`;
@@ -681,7 +695,7 @@ const UI = {
 
                 if (opt.n === "Main Stat %") {
                     name = `${build} %`;
-                    val = name; // The option value should match the display for calculation
+                    val = name;
                 }
                 if (opt.n === "Adaptive Atk") {
                     name = (build === "Intelligence") ? "MATK" : "ATK";
@@ -695,6 +709,7 @@ const UI = {
             <div class="gear-row" data-slot="${slot}">
                 <div class="slot-name">${slot}</div>
                 <div class="text-center">${raidCheck}</div>
+                ${raidPlusCol}
                 <select id="s1-${i}" onchange="Logic.updateRow(${i})"><option>-</option></select>
                 <select id="s2-${i}" onchange="Logic.updateRow(${i})"><option>-</option></select>
                 <select id="s3-${i}"><option>-</option></select>
@@ -722,10 +737,8 @@ const UI = {
         }
         const legGroup = DATA.LEGENDARY_DATA[slot] || (DATA.SLOT_CATS.ARMOR.includes(slot) ? DATA.LEGENDARY_DATA.ARMOR : DATA.LEGENDARY_DATA.ACC);
         
-        // Find option data based on original name or adapted name
         let optData = legGroup.opts.find(o => o.n === type); 
         
-        // Check for dynamic names if standard check fails
         if (!optData) {
              if (type.includes("%")) optData = legGroup.opts.find(o => o.n === "Main Stat %");
              if (type === "ATK" || type === "MATK") optData = legGroup.opts.find(o => o.n === "Adaptive Atk");
@@ -739,6 +752,9 @@ const UI = {
 
     toggleRaid: (idx) => {
         const isRaid = $(`raid-${idx}`).checked;
+        if (!isRaid && $(`raidplus-${idx}`)) {
+            $(`raidplus-${idx}`).checked = false; // Schaltet Raid+ ab, wenn Basis-Raid deaktiviert wird
+        }
         $(`leg-type-${idx}`).disabled = isRaid;
         $(`leg-val-${idx}`).disabled = isRaid;
         if(isRaid) { 
@@ -746,6 +762,13 @@ const UI = {
             UI.updateLegValues(idx); 
         }
         Logic.updateRow(idx);
+    },
+
+    toggleRaidPlus: (idx) => {
+        if ($(`raidplus-${idx}`).checked) {
+            $(`raid-${idx}`).checked = true; // Automatisch aktivieren, wenn Raid+ gesetzt ist
+        }
+        UI.toggleRaid(idx);
     }
 };
 
@@ -826,6 +849,7 @@ const Logic = {
 
     clearAll: () => {
          DATA.SLOTS.forEach((_, i) => {
+             if ($(`raidplus-${i}`)) $(`raidplus-${i}`).checked = false;
              const raidCheck = $(`raid-${i}`);
              if(raidCheck) {
                  raidCheck.checked = false;
@@ -839,7 +863,7 @@ const Logic = {
              $(`sigil-name-${i}`).value = "";
              $(`sigil-lvl-${i}`).value = "1";
 
-             $(`leg-type-${i}`).value = ""; // Reset to empty/default
+             $(`leg-type-${i}`).value = ""; 
              UI.updateLegValues(i);
          });
 
@@ -883,15 +907,24 @@ const Logic = {
 
         DATA.SLOTS.forEach((slot, i) => {
             const isRaid = $(`raid-${i}`)?.checked;
-            const vals = (slot === "Weapon") 
-                ? (isRaid ? DATA.VALUES.WEAPON_RAID : DATA.VALUES.WEAPON_STD) 
-                : (isRaid ? DATA.VALUES.ARMOR_RAID : DATA.VALUES.ARMOR_STD);
+            const isRaidPlus = $(`raidplus-${i}`)?.checked;
+
+            // Rüstungswerte dynamisch basierend auf "Raid +" laden
+            let vals;
+            if (slot === "Weapon") {
+                vals = isRaid ? DATA.VALUES.WEAPON_RAID : DATA.VALUES.WEAPON_STD;
+            } else {
+                if (ENABLE_RAID_PLUS && isRaidPlus) {
+                    vals = ARMOR_RAID_UPGRADED;
+                } else {
+                    vals = isRaid ? DATA.VALUES.ARMOR_RAID : DATA.VALUES.ARMOR_STD;
+                }
+            }
 
             const p = $(`s1-${i}`).value;
             const s = $(`s2-${i}`).value;
             const r = $(`s3-${i}`).value;
 
-            // BUG FIX: Ensure key exists in DATA.STATS before adding
             if (p && DATA.STATS.includes(p)) total[p] = (total[p] || 0) + vals.p;
             if (s && DATA.STATS.includes(s)) total[s] = (total[s] || 0) + vals.s;
             if (r && DATA.STATS.includes(r)) total[r] = (total[r] || 0) + vals.r;
@@ -937,9 +970,8 @@ const Logic = {
             }
         });
 
-        total.Haste += (baseAgi * 0.45); // agility->haste conversion
+        total.Haste += (baseAgi * 0.45); 
 
-        // BUG FIX: ID MAPPING for Raw Stats
         const statIdMap = {
             "Versatility": "vers",
             "Mastery": "mast",
@@ -949,7 +981,7 @@ const Logic = {
         };
 
         Object.keys(total).forEach(k => {
-            const elId = `raw-${statIdMap[k]}`; // Uses corrected map
+            const elId = `raw-${statIdMap[k]}`; 
             const el = $(elId);
             if(el) el.innerText = total[k].toFixed(0);
         });
@@ -961,12 +993,8 @@ const Logic = {
         let pLuck = Logic.getStatPercent("Luck", total.Luck);
 
         if (raidBonus && raidBonus.l === "Luck") {
-    pLuck += raidBonus.v; // Fügt die 6.0 direkt als +6% auf das Endergebnis hinzu
-}
-// Falls in Zukunft andere Specs mit Versatility-Raid-Bonus flach berechnet werden sollen:
-if (raidBonus && raidBonus.l.includes("Vers")) {
-    // pVers += raidBonus.v; // Optional, falls gewünscht
-}
+            pLuck += raidBonus.v; 
+        }
 
         $('r-vers').innerText = pVers.toFixed(2) + "%";
         $('r-mast').innerText = pMast.toFixed(2) + "%";
@@ -985,7 +1013,6 @@ if (raidBonus && raidBonus.l.includes("Vers")) {
             exHtml += `<div class="result-row" style="font-size:0.9em; border:none; padding:2px 0;"><span>${k}:</span> <span>+${v.toFixed(1)}%</span></div>`;
         });
 
-        // --- HEAVY GUARDIAN ASPD LOGIC ---
         const currentClass = $('class-select').value;
         if (currentClass === "Heavy Guardian") {
             const aspdBonus = pHaste * 0.6;
@@ -1181,6 +1208,7 @@ const Optimizer = {
             const raidCheck = $(`raid-${i}`);
             if(raidCheck) {
                 raidCheck.checked = g.raid;
+                if ($(`raidplus-${i}`)) $(`raidplus-${i}`).checked = false;
                 UI.toggleRaid(i);
             }
             $(`s1-${i}`).value = g.p;
