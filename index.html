@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BPSR | ilvl 260 GEAR STAT PLANNER | End SEASON 3</title>
+    <title>BPSR | ilvl 240 GEAR STAT PLANNER | MID SEASON 3</title>
     <style>
         /* =========================================
            VISUAL THEME: NIGHTMODE CRIMSON (DARK)
@@ -219,7 +219,7 @@
 
 <div class="main-wrapper">
     <div class="panel planner-panel">
-        <h2>BPSR | ilvl 260 Gear Stat Planner | End Season 3</h2>
+        <h2>BPSR | ilvl 240 Gear Stat Planner | Mid Season 3</h2>
         
         <div class="tab-container">
             <button id="nav-planner" class="tab-btn active" onclick="App.switchTab('planner')">Manual Planner</button>
@@ -346,7 +346,7 @@
 
         <div class="footer">
             <div>BPSR Planner by KrowMeLL forked by Hyperia</div>
-            <div>End Season 3 • Gear Level 260</div>
+            <div>Mid Season 3 • Gear Level 240</div>
         </div>
     </div>
 
@@ -387,8 +387,6 @@
 </div>
 
 <script>
-    // --- SEASONAL CONFIGURATION ---
-const ENABLE_RAID_UPGRADED = true; // Nächste Season einfach auf false setzen, um das Feature zu deaktivieren!
 // --- 1. DATA CONFIGURATION ---
 const DATA = {
     STATS: ["Versatility", "Mastery", "Haste", "Crit", "Luck"],
@@ -404,7 +402,6 @@ const DATA = {
     VALUES: {
         WEAPON_RAID: { p: 5400, s: 5400, r: 0 },
         ARMOR_RAID:  { p: 2370, s: 2370,  r: 711 },
-        ARMOR_RAID_UPGRADED: { p: 2700, s: 2700, r: 711 }, // UPGRADED Raid Armor
         WEAPON_STD:  { p: 4740, s: 2370,  r: 1422 },
         ARMOR_STD:   { p: 2370, s: 1185,  r: 711 }
     },
@@ -433,41 +430,41 @@ const DATA = {
     LEGENDARY_DATA: {
         ARMOR: {
             opts: [
-                { n: "Max HP", v: [6000], u: "" }, // Dyn name
-                { n: "Armor", v: [400], u: "" },
-                { n: "All Elem Res", v: [200], u: "" }
+                { n: "Max HP", v: [5000], u: "" }, // Dyn name
+                { n: "Armor", v: [320], u: "" },
+                { n: "All Elem Res", v: [160], u: "" }
             ]
         },
         Helmet: {
             opts: [
                 { n: "Cast Speed %", v: [2.0], u: "%" }, // Dyn name
-                { n: "Max HP", v: [6000], u: "" }, 
-                { n: "Armor", v: [400], u: "" },
-                { n: "All Elem Res", v: [200], u: "" }
+                { n: "Max HP", v: [5000], u: "" }, 
+                { n: "Armor", v: [320], u: "" },
+                { n: "All Elem Res", v: [160], u: "" }
             ]
         },
         Chest: {
             opts: [
                 { n: "Shield %", v: [4.0], u: "%" }, // Dyn name
-                { n: "Max HP", v: [6000], u: "" }, 
-                { n: "Armor", v: [400], u: "" },
-                { n: "All Elem Res", v: [200], u: "" }
+                { n: "Max HP", v: [5000], u: "" }, 
+                { n: "Armor", v: [320], u: "" },
+                { n: "All Elem Res", v: [160], u: "" }
             ]
         },
         Gloves: {
             opts: [
                 { n: "Attack Speed", v: [1.0], u: "%" }, // Dyn name
-                { n: "Max HP", v: [6000], u: "" }, 
-                { n: "Armor", v: [400], u: "" },
-                { n: "All Elem Res", v: [200], u: "" }
+                { n: "Max HP", v: [5000], u: "" }, 
+                { n: "Armor", v: [320], u: "" },
+                { n: "All Elem Res", v: [160], u: "" }
             ]
         },
         Boots: {
             opts: [
                 { n: "Movement Speed", v: [4.0], u: "%" }, // Dyn name
-                { n: "Max HP", v: [6000], u: "" }, 
-                { n: "Armor", v: [400], u: "" },
-                { n: "All Elem Res", v: [200], u: "" }
+                { n: "Max HP", v: [5000], u: "" }, 
+                { n: "Armor", v: [320], u: "" },
+                { n: "All Elem Res", v: [160], u: "" }
             ]
         },
         Weapon: {
@@ -481,17 +478,17 @@ const DATA = {
         "Bracelet (L)": {
             opts: [
                 { n: "Healing Output", v: [4.0], u: "%" }, // Dyn name
-                { n: "Max HP", v: [6000], u: "" }, 
-                { n: "Armor", v: [400], u: "" },
-                { n: "All Elem Res", v: [200], u: "" }
+                { n: "Max HP", v: [5000], u: "" }, 
+                { n: "Armor", v: [320], u: "" },
+                { n: "All Elem Res", v: [160], u: "" }
             ]
         },
         "Bracelet (R)": {
             opts: [
                 { n: "Healing Output", v: [4.0], u: "%" }, // Dyn name
-                { n: "Max HP", v: [6000], u: "" }, 
-                { n: "Armor", v: [400], u: "" },
-                { n: "All Elem Res", v: [200], u: "" }
+                { n: "Max HP", v: [5000], u: "" }, 
+                { n: "Armor", v: [320], u: "" },
+                { n: "All Elem Res", v: [160], u: "" }
             ]
         },
         ACC: {
@@ -592,29 +589,6 @@ const createOpt = (val, txt) => `<option value="${val}">${txt || val}</option>`;
 
 const UI = {
     init: () => {
-        // Dynamisches CSS-Grid-Layout injizieren, falls das Upgrade aktiv ist (9 Spalten statt 8)
-        if (ENABLE_RAID_UPGRADED) {
-            const style = document.createElement('style');
-            style.innerHTML = `
-                .gear-header, .gear-row {
-                    grid-template-columns: 0.6fr 0.3fr 0.6fr 0.7fr 0.7fr 0.7fr 2.2fr 0.6fr 1.8fr !important;
-                }
-            `;
-            document.head.appendChild(style);
-        }
-
-        // Header dynamisch aufbauen
-        $('gear-header').innerHTML = `
-            <div>Slot</div>
-            <div class="text-center">Raid</div>
-            ${ENABLE_RAID_UPGRADED ? '<div class="text-center">Raid ilvl 250</div>' : ''}
-            <div>Primary</div>
-            <div>Secondary</div>
-            <div>Reforge</div>
-            <div>Sigil Name</div>
-            <div>Sigil Lvl</div>
-            <div>Legendary WIP</div>
-        `;
         const classSel = $('class-select');
         classSel.innerHTML = Object.keys(DATA.CLASSES).map(c => createOpt(c)).join('');
         
@@ -691,25 +665,29 @@ const UI = {
 
         container.innerHTML = DATA.SLOTS.map((slot, i) => {
             const isRaidSlot = DATA.RAID_SLOTS.includes(slot);
-            const raidCheck = isRaidSlot ? `<input type="checkbox" id="raid-${i}" onchange="UI.toggleRaid(${i}, '${slot}', 'normal')">` : '';
-            
-            // Neue Spalte für das Raid-Upgrade (Nur für Rüstung, nicht für Waffe)
-            const isArmorRaidSlot = isRaidSlot && slot !== "Weapon";
-            const raidUpgradedCheck = ENABLE_RAID_UPGRADED 
-                ? (isArmorRaidSlot ? `<div class="text-center"><input type="checkbox" id="raid250-${i}" onchange="UI.toggleRaid(${i}, '${slot}', 'upgraded')"></div>` : '<div class="text-center">-</div>')
-                : '';
+            const raidCheck = isRaidSlot ? `<input type="checkbox" id="raid-${i}" onchange="UI.toggleRaid(${i}, '${slot}')">` : '';
             
             const slotSigils = SIGIL_DB.filter(s => s.s.includes(slot));
             const sigilOpts = `<option value="">-</option>` + slotSigils.map(s => createOpt(s.n)).join('');
             
+            // Generate Legendary Options based on slot type
             const legGroup = DATA.LEGENDARY_DATA[slot] || (DATA.SLOT_CATS.ARMOR.includes(slot) ? DATA.LEGENDARY_DATA.ARMOR : DATA.LEGENDARY_DATA.ACC);
             
             let legTypeOpts = `<option value="">-</option>`;
             legGroup.opts.forEach(opt => {
                 if (opt.req && opt.req !== build) return; 
-                let name = opt.n; let val = opt.n;
-                if (opt.n === "Main Stat %") { name = `${build} %`; val = name; }
-                if (opt.n === "Adaptive Atk") { name = (build === "Intelligence") ? "MATK" : "ATK"; val = name; }
+                let name = opt.n;
+                let val = opt.n;
+
+                if (opt.n === "Main Stat %") {
+                    name = `${build} %`;
+                    val = name; // The option value should match the display for calculation
+                }
+                if (opt.n === "Adaptive Atk") {
+                    name = (build === "Intelligence") ? "MATK" : "ATK";
+                    val = name;
+                }
+
                 legTypeOpts += `<option value="${val}">${name}</option>`;
             });
 
@@ -717,7 +695,6 @@ const UI = {
             <div class="gear-row" data-slot="${slot}">
                 <div class="slot-name">${slot}</div>
                 <div class="text-center">${raidCheck}</div>
-                ${raidUpgradedCheck}
                 <select id="s1-${i}" onchange="Logic.updateRow(${i})"><option>-</option></select>
                 <select id="s2-${i}" onchange="Logic.updateRow(${i})"><option>-</option></select>
                 <select id="s3-${i}"><option>-</option></select>
@@ -760,27 +737,16 @@ const UI = {
         Logic.calculate();
     },
 
-toggleRaid: (idx, slot, type) => {
-        const isRaid = $(`raid-${idx}`)?.checked || false;
-        const isRaidUpgraded = (ENABLE_RAID_UPGRADED && $(`raid250-${idx}`)) ? $(`raid250-${idx}`).checked : false;
-        
-        // Exklusivität steuern
-        if (type === 'normal' && isRaid && ENABLE_RAID_UPGRADED && $(`raid250-${idx}`)) {
-            $(`raid250-${idx}`).checked = false;
-        }
-        if (type === 'upgraded' && isRaidUpgraded && $(`raid-${idx}`)) {
-            $(`raid-${idx}`).checked = false;
-        }
-        
-        const anyRaidActive = isRaid || isRaidUpgraded;
-        
-        $(`leg-type-${idx}`).disabled = anyRaidActive;
-        $(`leg-val-${idx}`).disabled = anyRaidActive;
-        if(anyRaidActive) { 
+    toggleRaid: (idx) => {
+        const isRaid = $(`raid-${idx}`).checked;
+        $(`leg-type-${idx}`).disabled = isRaid;
+        $(`leg-val-${idx}`).disabled = isRaid;
+        if(isRaid) { 
             $(`leg-type-${idx}`).value = ""; 
             UI.updateLegValues(idx); 
         }
         Logic.updateRow(idx);
+    }
 };
 
 const App = {
@@ -802,17 +768,20 @@ const Logic = {
         Logic.calculate();
     },
 
-updateRow: (idx) => {
+    updateRow: (idx) => {
         const slot = DATA.SLOTS[idx];
         const build = Logic.getBuildType();
         const isRaid = $(`raid-${idx}`)?.checked || false;
-        const isRaidUpgraded = (ENABLE_RAID_UPGRADED && $(`raid250-${idx}`)) ? $(`raid250-${idx}`).checked : false;
-        const anyRaid = isRaid || isRaidUpgraded;
         
-        const elP = $(`s1-${idx}`); const elS = $(`s2-${idx}`); const elR = $(`s3-${idx}`);
-        const valP = elP.value; const valS = elS.value; const valR = elR.value;
+        const elP = $(`s1-${idx}`);
+        const elS = $(`s2-${idx}`);
+        const elR = $(`s3-${idx}`);
 
-        if (anyRaid) {
+        const valP = elP.value;
+        const valS = elS.value;
+        const valR = elR.value;
+
+        if (isRaid) {
             const spec = $('spec-select').value;
             const stats = DATA.SPEC_STATS[spec] || ["Mastery", "Versatility"]; 
             
@@ -855,17 +824,12 @@ updateRow: (idx) => {
         Logic.calculate();
     },
 
-clearAll: () => {
+    clearAll: () => {
          DATA.SLOTS.forEach((_, i) => {
              const raidCheck = $(`raid-${i}`);
-             if(raidCheck) raidCheck.checked = false;
-             
-             if (ENABLE_RAID_UPGRADED) {
-                 const raidUpgradedCheck = $(`raid250-${i}`);
-                 if(raidUpgradedCheck) raidUpgradedCheck.checked = false;
-             }
-
-             UI.toggleRaid(i);
+             if(raidCheck) {
+                 raidCheck.checked = false;
+                 UI.toggleRaid(i); 
              }
              $(`s1-${i}`).value = "";
              $(`s2-${i}`).value = "";
@@ -917,34 +881,24 @@ clearAll: () => {
 
         let raidBonus = null;
 
-DATA.SLOTS.forEach((slot, i) => {
-            const isRaid = $(`raid-${i}`)?.checked || false;
-            const isRaidUpgraded = (ENABLE_RAID_UPGRADED && $(`raid250-${i}`)) ? $(`raid250-${i}`).checked : false;
-            
-            let vals;
-            if (slot === "Weapon") {
-                vals = isRaid ? DATA.VALUES.WEAPON_RAID : DATA.VALUES.WEAPON_STD;
-            } else {
-                if (isRaidUpgraded) {
-                    vals = DATA.VALUES.ARMOR_RAID_UPGRADED; // Nutzt die neuen Upgrade-Werte
-                } else if (isRaid) {
-                    vals = DATA.VALUES.ARMOR_RAID;
-                } else {
-                    vals = DATA.VALUES.ARMOR_STD;
-                }
-            }
+        DATA.SLOTS.forEach((slot, i) => {
+            const isRaid = $(`raid-${i}`)?.checked;
+            const vals = (slot === "Weapon") 
+                ? (isRaid ? DATA.VALUES.WEAPON_RAID : DATA.VALUES.WEAPON_STD) 
+                : (isRaid ? DATA.VALUES.ARMOR_RAID : DATA.VALUES.ARMOR_STD);
 
             const p = $(`s1-${i}`).value;
             const s = $(`s2-${i}`).value;
             const r = $(`s3-${i}`).value;
 
+            // BUG FIX: Ensure key exists in DATA.STATS before adding
             if (p && DATA.STATS.includes(p)) total[p] = (total[p] || 0) + vals.p;
             if (s && DATA.STATS.includes(s)) total[s] = (total[s] || 0) + vals.s;
             if (r && DATA.STATS.includes(r)) total[r] = (total[r] || 0) + vals.r;
 
             if (slot === "Weapon" && isRaid) raidBonus = DATA.RAID_BONUS[spec];
 
-            if (!isRaid && !isRaidUpgraded) {
+            if (!isRaid) {
                 const lType = $(`leg-type-${i}`).value;
                 const lVal = parseFloat($(`leg-val-${i}`).value) || 0;
                 if (lType && lType !== "") {
@@ -1006,8 +960,7 @@ DATA.SLOTS.forEach((slot, i) => {
         const pCrit = Logic.getStatPercent("Crit", total.Crit);
         let pLuck = Logic.getStatPercent("Luck", total.Luck);
 
-        // DIESEN BLOCK HINZUFÜGEN:
-if (raidBonus && raidBonus.l === "Luck") {
+        if (raidBonus && raidBonus.l === "Luck") {
     pLuck += raidBonus.v; // Fügt die 6.0 direkt als +6% auf das Endergebnis hinzu
 }
 // Falls in Zukunft andere Specs mit Versatility-Raid-Bonus flach berechnet werden sollen:
@@ -1211,7 +1164,7 @@ const Optimizer = {
             const data = DATA.IMAGINE.OPTIONS[im.key];
             if(data) raw[data.stat] += data.vals[im.lvl];
         });
-        
+
         return {
             v: Logic.getStatPercent("Versatility", raw.Versatility),
             m: Logic.getStatPercent("Mastery", raw.Mastery),
